@@ -1,0 +1,8 @@
+defaultBaseImage: cgr.dev/chainguard/static:latest
+defaultPlatforms:
+  - linux/amd64
+builds:
+  - id: inkwell
+    main: .
+    flags: [-trimpath]
+    ldflags: [-s, -w]

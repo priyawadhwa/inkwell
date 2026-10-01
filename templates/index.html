@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inkwell Bank</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-revision="{{.Revision}}">
+  <header>
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🐙</span>
+      <div>
+        <h1>Inkwell Bank</h1>
+        <p class="tagline">Banking with all eight arms</p>
+      </div>
+    </div>
+    <div class="greeting">
+      Good morning, {{.Customer.FirstName}}
+      {{if .Flags.CamouflageMode}}<span class="badge camo-badge">Camouflage on</span>{{end}}
+    </div>
+  </header>
+
+  <main>
+    <section class="hero card">
+      <p class="label">Total balance</p>
+      <p class="big">{{.Amount .Customer.NetWorth}}</p>
+    </section>
+
+    <section class="accounts">
+      {{range .Customer.Accounts}}
+      <article class="card account">
+        <p class="label">{{.Name}} <span class="muted">{{.Number}}</span></p>
+        <p class="balance">{{$.Amount .Balance}}</p>
+        <p class="muted">{{.Note}}</p>
+      </article>
+      {{end}}
+    </section>
+
+    <section class="card">
+      <h2>Recent activity</h2>
+      <table>
+        <tbody>
+        {{range .Customer.Transactions}}
+          <tr>
+            <td class="muted">{{.When.Format "Jan 2"}}</td>
+            <td>{{.Merchant}}<br><span class="muted">{{.Category}}</span></td>
+            <td class="right {{if lt .Amount 0}}debit{{else}}credit{{end}}">{{$.Amount .Amount}}</td>
+          </tr>
+        {{end}}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="cards">
+      {{range .Customer.Cards}}
+      <article class="card payment-card" data-last4="{{.Last4}}">
+        <p class="label">{{.Name}}</p>
+        <p class="pan">•••• {{.Last4}}</p>
+        {{if $.Flags.InkCloudCardFreeze}}
+        <button class="freeze" type="button">Ink it (freeze card)</button>
+        {{end}}
+      </article>
+      {{end}}
+    </section>
+  </main>
+
+  <footer>
+    Inkwell Bank is a demo. No octopi were overdrafted. · revision <code>{{.Revision}}</code>
+  </footer>
+
+  <script>
+    // Tap a camouflaged amount to reveal it.
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest(".camo");
+      if (el) { el.classList.toggle("revealed"); el.textContent = el.classList.contains("revealed") ? el.dataset.amount : "•••••"; }
+      const btn = e.target.closest(".freeze");
+      if (btn) { const card = btn.closest(".payment-card"); card.classList.toggle("inked"); btn.textContent = card.classList.contains("inked") ? "Un-ink (unfreeze)" : "Ink it (freeze card)"; }
+    });
+    // Reload when a new revision is deployed, so the change shows up on its own.
+    const current = document.body.dataset.revision;
+    setInterval(async () => {
+      try {
+        const r = await fetch("/version", { cache: "no-store" });
+        const { revision } = await r.json();
+        if (revision && revision !== current) location.reload();
+      } catch (_) {}
+    }, 2000);
+  </script>
+</body>
+</html>

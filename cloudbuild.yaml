@@ -1,0 +1,22 @@
+# Deploys main to Cloud Run. A Cloud Build trigger on pushes to main runs this
+# until Checks postsubmit lowers, at which point it becomes a postsubmit check.
+steps:
+  - id: build
+    name: cgr.dev/chainguard/ko:latest
+    env:
+      - KO_DOCKER_REPO=us-central1-docker.pkg.dev/$PROJECT_ID/inkwell/inkwell
+      - GOFLAGS=-buildvcs=false # the trigger's checkout may carry no .git
+      - HOME=/tmp # ko's image runs as nonroot; Cloud Build's /builder/home is root-owned
+    # Nonroot can't write /workspace either, so the deploy step finds the image
+    # by its commit tag instead of a file.
+    script: |
+      ko build --bare --tags "$COMMIT_SHA" .
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    script: |
+      gcloud run deploy inkwell --region us-central1 --image "us-central1-docker.pkg.dev/$PROJECT_ID/inkwell/inkwell:$COMMIT_SHA" --quiet
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  automapSubstitutions: true # expose $COMMIT_SHA and $PROJECT_ID to script steps

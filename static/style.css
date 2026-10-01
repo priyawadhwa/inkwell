@@ -1,0 +1,86 @@
+:root {
+  --abyss: #0b1026;
+  --deep: #141b3d;
+  --reef: #1f2a5c;
+  --ink: #e8ecff;
+  --muted: #8f9bd1;
+  --linky: #7b5cff;
+  --coral: #ff6f91;
+  --kelp: #3ddc97;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 20% 0%, var(--reef), var(--abyss) 60%);
+  min-height: 100vh;
+}
+
+header, main, footer { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+header { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; flex-wrap: wrap; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.logo { font-size: 44px; }
+h1 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+h2 { margin: 0 0 12px; font-size: 18px; }
+.tagline, .muted { color: var(--muted); margin: 2px 0 0; }
+.greeting { font-size: 18px; display: flex; align-items: center; gap: 10px; }
+
+main { display: grid; gap: 18px; padding-top: 24px; padding-bottom: 24px; }
+
+.card {
+  background: linear-gradient(160deg, var(--deep), var(--abyss));
+  border: 1px solid rgba(123, 92, 255, 0.25);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.hero .big { font-size: 56px; font-weight: 700; margin: 4px 0 0; letter-spacing: -0.03em; }
+.label { margin: 0; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.accounts, .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.balance { font-size: 30px; font-weight: 600; margin: 8px 0; }
+
+table { width: 100%; border-collapse: collapse; }
+td { padding: 10px 4px; border-top: 1px solid rgba(143, 155, 209, 0.15); vertical-align: top; }
+.right { text-align: right; font-variant-numeric: tabular-nums; }
+.debit { color: var(--coral); }
+.credit { color: var(--kelp); }
+
+.payment-card { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--linky), #3a2b8f); }
+.pan { font-size: 22px; letter-spacing: 0.12em; margin: 18px 0; }
+.freeze { background: var(--abyss); color: var(--ink); border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.payment-card.inked::after {
+  content: "FROZEN";
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-weight: 800; letter-spacing: 0.3em;
+  background: radial-gradient(circle, #000 40%, rgba(0, 0, 0, 0.85));
+  animation: ink 0.6s ease-out;
+  pointer-events: none;
+}
+.payment-card.inked .freeze { position: relative; z-index: 1; }
+
+/* Camouflage mode: amounts blend into the reef until tapped. */
+.camo {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0 6px;
+  color: transparent;
+  background: linear-gradient(90deg, var(--reef), var(--linky), var(--kelp), var(--reef));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 2.4s linear infinite;
+}
+.camo.revealed { color: inherit; background: none; animation: none; }
+.camo-badge { background: rgba(61, 220, 151, 0.15); color: var(--kelp); }
+.badge { font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+
+@keyframes shimmer { from { background-position: 0% 0; } to { background-position: 300% 0; } }
+@keyframes ink { from { transform: scale(0.2); opacity: 0; border-radius: 50%; } to { transform: scale(1); opacity: 1; } }
+
+footer { color: var(--muted); font-size: 13px; padding-bottom: 32px; }

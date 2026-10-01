@@ -1,0 +1,23 @@
+# Inkwell has no third-party Go dependencies, so every check is hermetic:
+# no network: block, no egress allowlist, nothing to fetch.
+version: 1
+checks:
+  build:
+    cmd: go build ./...
+    timeout: 5m
+  vet:
+    cmd: go vet ./...
+    timeout: 5m
+  test:
+    cmd: go test -count=1 ./...
+    timeout: 5m
+  gofmt:
+    script: |
+      unformatted=$(gofmt -l .)
+      if [ -n "$unformatted" ]; then
+        echo "gofmt needed on:"; echo "$unformatted"; exit 1
+      fi
+    timeout: 2m
+  lint:
+    cmd: golangci-lint run ./...
+    timeout: 5m
