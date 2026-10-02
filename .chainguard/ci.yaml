@@ -6,6 +6,7 @@ environment:
     - go-1.27
     - git
     - golangci-lint~2.13.2
+    - claude                  # Claude Code in develop sessions
   vars:
     GOTOOLCHAIN: local        # never download a toolchain; the guest has no network
 checks:
