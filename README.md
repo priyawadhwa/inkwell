@@ -28,7 +28,7 @@ go test ./...
 
 ## CI and deploy
 
-Pull requests run the checks in [`.chainguard/ci/`](./.chainguard/ci/) on
+Pull requests run the checks in [`.chainguard/ci.yaml`](./.chainguard/ci.yaml) on
 Chainguard Checks. Merging to `main` deploys to Cloud Run with
 [`cloudbuild.yaml`](./cloudbuild.yaml). Open dashboards reload themselves when
 a new revision goes live.

@@ -9,7 +9,7 @@ the frontend embedded with `go:embed`.
 - `bank.go` — the demo customer's accounts, transactions, and cards
 - `flags.go`, `flags.json` — feature flags, compiled into the binary
 - `templates/index.html`, `static/style.css` — the dashboard
-- `.chainguard/ci/` — CI checks (build, vet, test, gofmt, lint)
+- `.chainguard/ci.yaml` — CI checks (build, vet, test, gofmt, lint)
 
 ## Feature flags
 

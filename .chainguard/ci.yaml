@@ -1,6 +1,13 @@
 # Inkwell has no third-party Go dependencies, so every check is hermetic:
 # no network: block, no egress allowlist, nothing to fetch.
 version: 1
+environment:
+  packages:
+    - go-1.27
+    - git
+    - golangci-lint~2.13.2
+  vars:
+    GOTOOLCHAIN: local        # never download a toolchain; the guest has no network
 checks:
   build:
     cmd: go build ./...
