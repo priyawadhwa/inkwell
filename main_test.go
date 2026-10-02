@@ -40,8 +40,9 @@ func TestHomePage(t *testing.T) {
 
 	for _, want := range []string{
 		"Good morning, Linky",
-		`<span class="amount">$12,480.22</span>`,  // Everyday Checking
-		`<span class="amount">$142,299.41</span>`, // total balance
+		`data-amount="$12,480.22"`,  // Everyday Checking
+		`data-amount="$142,299.41"`, // total balance
+		"Camouflage on",
 		"Coral Café",
 	} {
 		if !strings.Contains(body, want) {
